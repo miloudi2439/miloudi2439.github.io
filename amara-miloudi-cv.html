@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amara Miloudi — Data Scientist & Full Stack Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Fraunces:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a25;
+    --border: #ffffff0f;
+    --accent: #6ee7b7;
+    --accent2: #818cf8;
+    --accent3: #f472b6;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+    --tag-bg: #ffffff08;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13.5px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Animated grain */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.35;
+  }
+
+  /* Glow orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb-1 { width: 500px; height: 500px; background: #6ee7b720; top: -150px; left: -100px; }
+  .orb-2 { width: 400px; height: 400px; background: #818cf815; bottom: 100px; right: -100px; }
+  .orb-3 { width: 300px; height: 300px; background: #f472b610; top: 50%; left: 50%; }
+
+  /* Layout */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 90px 0 60px;
+    position: relative;
+  }
+
+  .header-tag {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    animation: fadeUp 0.6s forwards 0.1s;
+  }
+  .header-tag::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.7s forwards 0.2s;
+  }
+
+  .name-highlight {
+    display: block;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .headline {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--muted);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.7s forwards 0.3s;
+  }
+
+  .contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    opacity: 0;
+    animation: fadeUp 0.7s forwards 0.4s;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--muted);
+    font-size: 12px;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .contact-item:hover { color: var(--accent); }
+  .contact-item .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent)40, var(--accent2)20, transparent);
+    margin: 48px 0;
+    opacity: 0;
+    animation: fadeIn 1s forwards 0.5s;
+  }
+
+  /* ── SECTION ── */
+  section {
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  section.visible { opacity: 1; transform: translateY(0); }
+
+  .section-label {
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── SUMMARY ── */
+  .summary-text {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    line-height: 1.9;
+    color: #b0b0cc;
+    max-width: 680px;
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .skill-tag {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 5px 12px;
+    font-size: 11.5px;
+    color: var(--muted);
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .skill-tag:hover {
+    border-color: var(--accent)60;
+    color: var(--accent);
+    background: var(--accent)08;
+  }
+
+  /* ── EXPERIENCE ── */
+  .timeline { position: relative; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent)60, transparent);
+  }
+
+  .timeline-item {
+    padding-left: 28px;
+    margin-bottom: 42px;
+    position: relative;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -3px;
+    top: 8px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  .job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  .job-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  .job-period {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .job-company {
+    font-size: 12px;
+    color: var(--accent2);
+    margin-bottom: 12px;
+  }
+
+  .job-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .job-bullets li {
+    color: #8888aa;
+    font-size: 12.5px;
+    padding-left: 14px;
+    position: relative;
+  }
+  .job-bullets li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent)80;
+  }
+
+  /* ── EDUCATION ── */
+  .edu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .edu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: border-color 0.2s;
+  }
+  .edu-item:hover { border-color: var(--accent2)40; }
+
+  .edu-degree {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+  .edu-school { font-size: 12px; color: var(--muted); }
+  .edu-year {
+    font-size: 11px;
+    color: var(--accent2);
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  /* ── PROJECTS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .project-card:hover { border-color: var(--border); transform: translateY(-3px); }
+  .project-card:hover::before { transform: scaleX(1); }
+
+  .project-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .project-client {
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .project-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeIn 0.8s forwards 0.8s;
+  }
+  .footer-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .footer-note { font-size: 11px; color: var(--muted)80; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    header { padding: 60px 0 40px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .edu-item { flex-direction: column; gap: 6px; }
+    .job-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-tag">Portfolio · CV</div>
+    <h1>
+      <span class="name-highlight">Amara Miloudi</span>
+    </h1>
+    <p class="headline">Data Scientist & Full Stack Developer — 7+ years of experience</p>
+    <div class="contact-row">
+      <a href="mailto:amara.miloudi.dev@gmail.com" class="contact-item">
+        <span class="dot"></span>amara.miloudi.dev@gmail.com
+      </a>
+      <a href="tel:+213669803526" class="contact-item">
+        <span class="dot"></span>+213 669 803 526
+      </a>
+      <a href="https://linkedin.com/in/amara-miloudi" target="_blank" class="contact-item">
+        <span class="dot"></span>linkedin.com/in/amara-miloudi
+      </a>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- SUMMARY -->
+  <section>
+    <div class="section-label">About</div>
+    <p class="summary-text">
+      A data scientist and full stack developer with hands-on experience in all levels of software development — design, analysis, development, and deployment. Experienced with end-to-end ML pipelines: from data preprocessing and feature engineering to model selection, hyperparameter tuning, and production deployment. Domains include NLP, image classification, sentiment analysis, and numerical data classification. Comfortable in Scrum/Agile environments.
+    </p>
+  </section>
+
+  <!-- SKILLS -->
+  <section>
+    <div class="section-label">Skills</div>
+    <div class="skills-grid">
+      <!-- AI / ML -->
+      <span class="skill-tag">Python</span>
+      <span class="skill-tag">Machine Learning</span>
+      <span class="skill-tag">Deep Learning</span>
+      <span class="skill-tag">TensorFlow</span>
+      <span class="skill-tag">Keras</span>
+      <span class="skill-tag">LangChain</span>
+      <span class="skill-tag">OpenAI</span>
+      <span class="skill-tag">Gemini</span>
+      <span class="skill-tag">Generative AI</span>
+      <span class="skill-tag">Vertex AI</span>
+      <span class="skill-tag">Document AI</span>
+      <span class="skill-tag">Dialogflow</span>
+      <span class="skill-tag">Google STT / TTS</span>
+      <span class="skill-tag">Databricks</span>
+      <span class="skill-tag">BigQuery</span>
+      <!-- Backend -->
+      <span class="skill-tag">Flask</span>
+      <span class="skill-tag">FastAPI</span>
+      <span class="skill-tag">Django</span>
+      <span class="skill-tag">ASP.NET Core</span>
+      <span class="skill-tag">C#</span>
+      <span class="skill-tag">Entity Framework</span>
+      <span class="skill-tag">WPF</span>
+      <span class="skill-tag">WCF</span>
+      <span class="skill-tag">PHP Laravel</span>
+      <!-- Frontend -->
+      <span class="skill-tag">JavaScript</span>
+      <span class="skill-tag">TypeScript</span>
+      <span class="skill-tag">Angular</span>
+      <span class="skill-tag">React</span>
+      <span class="skill-tag">HTML / CSS</span>
+      <span class="skill-tag">Bootstrap</span>
+      <span class="skill-tag">jQuery</span>
+      <!-- DB / DevOps -->
+      <span class="skill-tag">MySQL</span>
+      <span class="skill-tag">SQL Server</span>
+      <span class="skill-tag">SQLite</span>
+      <span class="skill-tag">Docker</span>
+      <span class="skill-tag">AWS S3</span>
+      <span class="skill-tag">AWS Lightsail</span>
+      <span class="skill-tag">DevOps Pipelines</span>
+      <span class="skill-tag">SignalR</span>
+      <span class="skill-tag">Agile / Jira</span>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section>
+    <div class="section-label">Experience</div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="job-header">
+          <span class="job-title">Senior Data Scientist</span>
+          <span class="job-period">Jan 2024 – Present</span>
+        </div>
+        <div class="job-company">Upwork · Remote</div>
+        <ul class="job-bullets">
+          <li>Developed AI solutions including Vertex AI document parsing and intent classification prototypes.</li>
+          <li>Enhanced API functionality, optimized data warehouses, and integrated chat history into Django chatbots.</li>
+          <li>Diagnosed and resolved web form script issues; built cloud functions for email processing.</li>
+          <li>Consistently received 5-star ratings for technical skills, communication, and delivery.</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item">
+        <div class="job-header">
+          <span class="job-title">Data Scientist</span>
+          <span class="job-period">May 2022 – Dec 2023</span>
+        </div>
+        <div class="job-company">Datascore · Remote</div>
+        <ul class="job-bullets">
+          <li>Built and deployed a customer-facing Conversation AI using Dialogflow and OpenAI on Google Cloud, integrated with Twilio.</li>
+          <li>Developed a Beep Detection Model deployed on Google Vertex AI with Twilio notifications.</li>
+          <li>Built a Human Detection Model with 98% accuracy using deep learning, deployed on Vertex AI.</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item">
+        <div class="job-header">
+          <span class="job-title">Full Stack .NET Developer</span>
+          <span class="job-period">Nov 2020 – May 2023</span>
+        </div>
+        <div class="job-company">Oorcode · Algeria</div>
+        <ul class="job-bullets">
+          <li>Full SDLC involvement — requirements to deployment — on web (ASP.NET Core + Angular) and WPF desktop apps.</li>
+          <li>Built and maintained DevOps pipelines; managed AWS S3 and Lightsail deployments.</li>
+          <li>Designed complex database models and developed C# Web API backends.</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item">
+        <div class="job-header">
+          <span class="job-title">Full Stack .NET Developer</span>
+          <span class="job-period">Jan 2019 – Nov 2020</span>
+        </div>
+        <div class="job-company">Gamadev · Algeria</div>
+        <ul class="job-bullets">
+          <li>Created desktop and web applications in C# WPF and ASP.NET Core for ERP solutions.</li>
+          <li>Designed database models using Entity Framework; developed Angular and JavaScript frontends.</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item">
+        <div class="job-header">
+          <span class="job-title">Freelance Web Developer</span>
+          <span class="job-period">Jan 2017 – Nov 2019</span>
+        </div>
+        <div class="job-company">Mostaqil · Remote</div>
+        <ul class="job-bullets">
+          <li>Built PHP and WordPress web applications; added features and resolved issues on existing projects.</li>
+          <li>Frontend work using JavaScript, Bootstrap, Ajax, jQuery, and HTML.</li>
+          <li>Backend development in PHP Laravel.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section>
+    <div class="section-label">Education</div>
+    <div class="edu-grid">
+      <div class="edu-item">
+        <div>
+          <div class="edu-degree">PhD in Artificial Intelligence (Computer Science)</div>
+          <div class="edu-school">El Oued University, Algeria</div>
+        </div>
+        <div class="edu-year" style="color: var(--accent);">In Progress</div>
+      </div>
+      <div class="edu-item">
+        <div>
+          <div class="edu-degree">Master of Computer Sciences (AI)</div>
+          <div class="edu-school">El Oued University, Algeria</div>
+        </div>
+        <div class="edu-year">2019</div>
+      </div>
+      <div class="edu-item">
+        <div>
+          <div class="edu-degree">Bachelor of Computer Sciences</div>
+          <div class="edu-school">El Oued University, Algeria</div>
+        </div>
+        <div class="edu-year">2017</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section>
+    <div class="section-label">Selected Projects</div>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-name">Legal Documents Parsing</div>
+        <div class="project-client">Jeff Schwartz Law Office · 2024–Present</div>
+        <div class="project-desc">FastAPI service for parsing legal documents using Vertex AI, Document AI, and OpenAI.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">Australian Property Price Forecasting</div>
+        <div class="project-client">2024</div>
+        <div class="project-desc">ML model for forecasting Australian real estate prices.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">AI Assistant</div>
+        <div class="project-client">2024</div>
+        <div class="project-desc">Company-document-based AI assistant to support employees with internal knowledge.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">Intent Classifier API</div>
+        <div class="project-client">2024</div>
+        <div class="project-desc">Flask API for intent classification powered by OpenAI.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">Advertisement Data Warehouse</div>
+        <div class="project-client">2024</div>
+        <div class="project-desc">Data warehouse pulling ad information from multiple APIs into Google Cloud BigQuery.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">Conversation AI</div>
+        <div class="project-client">Datascore · 2023</div>
+        <div class="project-desc">Customer-facing conversational AI using Dialogflow and OpenAI, deployed on Google Cloud, integrated with Twilio.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">Beep Detection Model</div>
+        <div class="project-client">Datascore · 2023</div>
+        <div class="project-desc">ML model detecting beeps at call end, deployed on Vertex AI and integrated with Twilio.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">Human Detection Model</div>
+        <div class="project-client">Datascore · 2022</div>
+        <div class="project-desc">Deep learning model classifying first 3 seconds of calls as human or robot — 98% accuracy. Deployed on Vertex AI.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">E-Learning Platform</div>
+        <div class="project-client">Oorcode · 2022</div>
+        <div class="project-desc">Full Angular + ASP.NET Core platform with Zoom and Vimeo integrations for student and admin portals.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">Booking Platform for Ad Spaces</div>
+        <div class="project-client">Oorcode · 2021</div>
+        <div class="project-desc">Advertising platform with shopping cart, checkout, payments, taxes, and discount management.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">Clinical Software</div>
+        <div class="project-client">Oorcode · 2021</div>
+        <div class="project-desc">WPF desktop app (client-server via WCF) for clinic management: prescriptions, appointments, payments, and lab tests.</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">Leukemia Classification (CNN)</div>
+        <div class="project-client">El Oued University · 2019</div>
+        <div class="project-desc">CNN model classifying white blood cells as normal or cancerous, optimized with KNN and SVM — 93% accuracy.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-name">Amara Miloudi</div>
+    <div class="footer-note">amara.miloudi.dev@gmail.com</div>
+  </footer>
+
+</div>
+
+<script>
+  // Scroll-triggered section reveals
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('section').forEach((s, i) => {
+    s.style.transitionDelay = `${i * 0.05}s`;
+    observer.observe(s);
+  });
+</script>
+</body>
+</html>
